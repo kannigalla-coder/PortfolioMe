@@ -1,4 +1,4 @@
-import { getFirebase, isConfigured, loadResume } from "./firebase.js";
+import { getClient, isConfigured, loadResume } from "./supabase.js";
 
 // สร้าง element พร้อม class และข้อความ (ใช้ textContent เสมอ กันการแทรก HTML)
 function el(tag, cls, text) {
@@ -161,13 +161,9 @@ function setupContactForm() {
     status.className = "status";
     status.textContent = "กำลังส่ง…";
     try {
-      const { db, fs } = await getFirebase();
-      await fs.addDoc(fs.collection(db, "messages"), {
-        name,
-        email,
-        message,
-        createdAt: fs.serverTimestamp(),
-      });
+      const sb = await getClient();
+      const { error } = await sb.from("messages").insert({ name, contact: email, message });
+      if (error) throw error;
       form.reset();
       status.className = "status ok";
       status.textContent = "ส่งข้อความแล้ว ขอบคุณค่ะ จะติดต่อกลับโดยเร็ว";

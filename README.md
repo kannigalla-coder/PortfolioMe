@@ -1,20 +1,21 @@
 # Portfolio · กรรณิกา ลาวะกุล
 
-เว็บเรซูเม่/พอร์ตโฟลิโอ HTML + JavaScript ล้วน (ไม่ต้อง build) ใช้ Firebase Firestore เก็บข้อมูลเรซูเม่และข้อความจากผู้เยี่ยมชม โฮสต์บน GitHub Pages
+เว็บเรซูเม่/พอร์ตโฟลิโอ HTML + JavaScript ล้วน (ไม่ต้อง build) ใช้ Supabase เก็บข้อมูลเรซูเม่และข้อความจากผู้เยี่ยมชม โฮสต์บน GitHub Pages
 
 ```
 index.html          หน้าเว็บหลัก (อ่านข้อมูลแล้ววาดหน้า)
-admin.html          หน้าแก้ไขข้อมูล + อ่านข้อความ (ล็อกอิน Google เฉพาะเจ้าของ)
-data/resume.json    ข้อมูลเรซูเม่ตั้งต้น (ใช้เมื่อยังไม่มีข้อมูลใน Firestore)
-js/firebase-config.js  ค่าตั้งค่า Firebase ← ต้องแก้
-firestore.rules     กฎความปลอดภัยของ Firestore
+admin.html          หน้าแก้ไขข้อมูล + อ่านข้อความ (ล็อกอินด้วยลิงก์ทางอีเมล เฉพาะเจ้าของ)
+data/resume.json    ข้อมูลเรซูเม่ตั้งต้น (ใช้เมื่อยังไม่มีข้อมูลใน Supabase)
+js/config.js        URL และ publishable key ของ Supabase ← ต้องแก้
+supabase-setup.sql  สร้างตาราง + RLS (รันใน SQL Editor)
 ```
 
 ## ทำงานอย่างไร
 
-- หน้าเว็บอ่านเรซูเม่จาก Firestore `site/resume` ถ้าไม่มี หรือยังไม่ได้ตั้งค่า Firebase จะอ่านจาก `data/resume.json`
-- ฟอร์ม "ฝากข้อความ" บันทึกลง Firestore `messages` (แสดงเฉพาะเมื่อตั้งค่า Firebase แล้ว)
-- `admin.html` ล็อกอินด้วย Google ได้เฉพาะ `kannigal.la@gmail.com` แก้ข้อมูลเป็น JSON แล้วบันทึก และอ่าน/ลบข้อความ
+- หน้าเว็บอ่านเรซูเม่จากตาราง `site_content` (แถว `id = 'resume'`) ถ้าไม่มี หรือยังไม่ได้ตั้งค่า Supabase จะอ่านจาก `data/resume.json`
+- ฟอร์ม "ฝากข้อความถึงฉัน" บันทึกลงตาราง `messages` (แสดงเฉพาะเมื่อตั้งค่า Supabase แล้ว)
+- `admin.html` ล็อกอินด้วย Magic Link ได้เฉพาะ `kannigal.la@gmail.com` แก้ข้อมูลเป็น JSON แล้วบันทึก และอ่าน/ลบข้อความ
+- สิทธิ์ทั้งหมดคุมด้วย Row Level Security: ทุกคนอ่านเรซูเม่และส่งข้อความได้ แต่แก้เรซูเม่และอ่านข้อความได้เฉพาะเจ้าของ
 
 ## รันในเครื่อง
 
@@ -25,18 +26,20 @@ npx serve .
 # หรือใช้ส่วนเสริม Live Server ใน VS Code
 ```
 
-## ตั้งค่า Firebase (ครั้งแรก)
+## ตั้งค่า Supabase (ครั้งแรก)
 
-1. ไปที่ https://console.firebase.google.com → **Add project**
-2. **Build → Firestore Database → Create database** (เลือก production mode, region `asia-southeast1`)
-3. แท็บ **Rules** → วางเนื้อหาจาก `firestore.rules` → **Publish**
-4. **Build → Authentication → Get started → Sign-in method → Google → Enable**
-5. **Authentication → Settings → Authorized domains → Add domain** ใส่ `<ชื่อผู้ใช้ GitHub>.github.io`
-6. **Project settings (⚙) → Your apps → Web (`</>`)** สร้างแอป แล้วคัดลอก `firebaseConfig` มาใส่ใน `js/firebase-config.js`
-7. เปิด `admin.html` → เข้าสู่ระบบ → กด **บันทึก** เพื่อเอาข้อมูลจากไฟล์ขึ้น Firestore
+ใช้ project เดิมที่มีอยู่ได้ (ตารางใหม่ไม่ชนกับตารางเดิม) หรือสร้าง project ใหม่ที่ https://supabase.com/dashboard
 
-> ค่าใน `firebaseConfig` (รวม apiKey) เปิดเผยได้ ไม่ใช่รหัสลับ ข้อมูลปลอดภัยด้วย `firestore.rules`
-> ถ้าเปลี่ยนอีเมลเจ้าของ ต้องแก้ทั้ง `ADMIN_EMAIL` ใน `js/firebase-config.js` และใน `firestore.rules`
+1. **SQL Editor → New query** → วางทั้งไฟล์ `supabase-setup.sql` → **Run**
+2. **Project Settings → Data API / API Keys** → คัดลอก Project URL และ **publishable key** (`sb_publishable_...`) มาใส่ใน `js/config.js`
+   ห้ามใช้ secret / service_role key เด็ดขาด เพราะไฟล์นี้ทุกคนเห็น
+3. **Authentication → URL Configuration**
+   - **Site URL:** `https://<ชื่อผู้ใช้ GitHub>.github.io/<ชื่อ repo>/`
+   - **Redirect URLs:** เพิ่ม `https://<ชื่อผู้ใช้ GitHub>.github.io/<ชื่อ repo>/admin.html` และ `http://localhost:3000/admin.html` (ไว้ทดสอบในเครื่อง)
+   - ถ้า project นี้มีเว็บอื่นใช้ Auth อยู่แล้ว ไม่ต้องเปลี่ยน Site URL เพิ่มแค่ Redirect URLs
+4. เปิด `admin.html` → กด **ส่งลิงก์เข้าสู่ระบบทางอีเมล** → กดลิงก์ในอีเมล → กด **บันทึก** เพื่อเอาข้อมูลจากไฟล์ขึ้น Supabase
+
+> ถ้าเปลี่ยนอีเมลเจ้าของ ต้องแก้ทั้ง `ADMIN_EMAIL` ใน `js/config.js` และทุกจุดใน `supabase-setup.sql` แล้วรัน SQL ใหม่
 
 ## ขึ้น GitHub Pages
 
@@ -54,4 +57,4 @@ npx serve .
 ## แก้ข้อมูลเรซูเม่
 
 - **ทางเว็บ:** เข้า `admin.html` แก้ JSON แล้วกดบันทึก (มีผลทันที ไม่ต้อง push)
-- **ทางไฟล์:** แก้ `data/resume.json` แล้ว push (ใช้เมื่อยังไม่มีข้อมูลใน Firestore หรือกด "โหลดค่าจากไฟล์" ใน admin แล้วบันทึก)
+- **ทางไฟล์:** แก้ `data/resume.json` แล้ว push (ใช้เมื่อยังไม่มีข้อมูลใน Supabase หรือกด "โหลดค่าจากไฟล์" ใน admin แล้วบันทึก)

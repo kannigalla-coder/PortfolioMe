@@ -29,14 +29,23 @@
     </div>
     <div class="bar">
       <a class="btn ghost" href="./">ดูหน้าเว็บ</a>
-      <button class="btn" id="login" type="button" hidden>เข้าสู่ระบบด้วย Google</button>
       <button class="btn ghost" id="logout" type="button" hidden>ออกจากระบบ</button>
     </div>
   </header>
 
+  <section id="login-section" hidden>
+    <form id="login-form" class="form">
+      <label for="login-email">อีเมลเจ้าของเว็บ
+        <input id="login-email" type="email" required autocomplete="email">
+      </label>
+      <button class="btn" type="submit">ส่งลิงก์เข้าสู่ระบบทางอีเมล</button>
+      <p id="login-status" class="status" role="status"></p>
+    </form>
+  </section>
+
   <div id="panel" hidden>
     <section>
-      <div class="sec-head"><h2>ข้อมูลเรซูเม่</h2><span class="label">Firestore · site/resume</span></div>
+      <div class="sec-head"><h2>ข้อมูลเรซูเม่</h2><span class="label">Supabase · site_content</span></div>
       <p class="status" style="margin-bottom:12px">แก้ข้อความใน JSON แล้วกดบันทึก หน้าเว็บจะแสดงข้อมูลใหม่ทันทีที่มีคนเปิด</p>
       <textarea id="editor" spellcheck="false" aria-label="ข้อมูลเรซูเม่ (JSON)"></textarea>
       <div class="bar" style="margin-top:12px">
@@ -47,7 +56,7 @@
     </section>
 
     <section>
-      <div class="sec-head"><h2>ข้อความจากผู้เยี่ยมชม</h2><span class="label">Firestore · messages</span></div>
+      <div class="sec-head"><h2>ข้อความจากผู้เยี่ยมชม</h2><span class="label">Supabase · messages</span></div>
       <p id="msg-empty" class="status" hidden>ยังไม่มีข้อความ</p>
       <ul class="msgs" id="msgs"></ul>
     </section>

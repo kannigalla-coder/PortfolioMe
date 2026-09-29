@@ -98,7 +98,7 @@
   "skills": [
     { "title": "Frontend", "text": "Vue 2/3, Nuxt 4, Vuetify, PrimeVue, Pinia/Vuex, vue-i18n, Highcharts, amCharts, OpenLayers" },
     { "title": "Backend", "text": "Node.js, Express, REST API, JWT auth, RBAC, งานตามเวลาด้วย node-cron, อัปโหลดไฟล์, Excel import/export" },
-    { "title": "ฐานข้อมูล", "text": "MySQL / MariaDB, Sequelize ORM, Firebase Firestore, ออกแบบ schema สำหรับ HR และงานผลิต, migration" },
+    { "title": "ฐานข้อมูล", "text": "MySQL / MariaDB, Sequelize ORM, Supabase (PostgreSQL), ออกแบบ schema สำหรับ HR และงานผลิต, migration" },
     { "title": "ERP & Integration", "text": "SAP Business One Service Layer, YUNATT face scan, Cartrack fleet API, TRCloud" },
     { "title": "งานเอกสาร & ส่งมอบ", "text": "เขียน spec รายโมดูล, บันทึกการออกแบบ, issue register, รอบทดสอบ CRUD, คู่มือผู้ใช้" },
     { "title": "ภาษา", "text": "ไทย: ดีเยี่ยม · อังกฤษ: พอใช้ (พูด อ่าน เขียน)" }
