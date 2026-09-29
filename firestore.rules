@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // เจ้าของเว็บ: ต้องตรงกับ ADMIN_EMAIL ใน js/firebase-config.js
+    function isOwner() {
+      return request.auth != null
+        && request.auth.token.email == "kannigal.la@gmail.com"
+        && request.auth.token.email_verified == true;
+    }
+
+    // ข้อมูลเรซูเม่: ทุกคนอ่านได้ แก้ได้เฉพาะเจ้าของ
+    match /site/{docId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // ข้อความจากฟอร์มติดต่อ: ใครก็ส่งได้ (ตรวจรูปแบบ) อ่าน/ลบได้เฉพาะเจ้าของ แก้ไม่ได้
+    match /messages/{msgId} {
+      allow create: if request.resource.data.keys().hasOnly(['name', 'email', 'message', 'createdAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 100
+        && request.resource.data.email is string && request.resource.data.email.size() <= 200
+        && request.resource.data.message is string
+        && request.resource.data.message.size() > 0 && request.resource.data.message.size() <= 2000
+        && request.resource.data.createdAt == request.time;
+      allow read, delete: if isOwner();
+      allow update: if false;
+    }
+  }
+}

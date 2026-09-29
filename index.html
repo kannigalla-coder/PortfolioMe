@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>กรรณิกา ลาวะกุล · Portfolio</title>
+<meta name="description" content="พอร์ตโฟลิโอของกรรณิกา ลาวะกุล โปรแกรมเมอร์ ผลงานระบบ HRMS และระบบ MES ที่เชื่อมต่อ SAP Business One">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<script type="module" src="js/app.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <p id="loading" class="loading">กำลังโหลด…</p>
+
+  <div id="content" hidden>
+    <header>
+      <div>
+        <h1 id="name"></h1>
+        <div class="role" id="role"></div>
+        <p class="intro" id="intro"></p>
+      </div>
+      <div class="contact" id="contact"></div>
+    </header>
+
+    <section><div class="cv" id="cv"></div></section>
+
+    <section>
+      <div class="sec-head"><h2>ผลงานหลัก</h2><span class="label">Selected work</span></div>
+      <div id="projects"></div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>ทักษะ</h2><span class="label">Skills</span></div>
+      <div id="skills"></div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>งานที่สนใจ</h2><span class="label">Looking for</span></div>
+      <div id="looking"></div>
+    </section>
+  </div>
+
+  <section id="message-section" hidden>
+    <div class="sec-head"><h2>ฝากข้อความถึงฉัน</h2><span class="label">Message</span></div>
+    <form id="message-form" class="form" novalidate>
+      <label for="msg-name">ชื่อ / บริษัท
+        <input id="msg-name" name="name" maxlength="100" required autocomplete="name">
+      </label>
+      <label for="msg-email">อีเมลหรือเบอร์ติดต่อกลับ
+        <input id="msg-email" name="email" maxlength="200" autocomplete="email">
+      </label>
+      <label for="msg-text">ข้อความ
+        <textarea id="msg-text" name="message" maxlength="2000" required></textarea>
+      </label>
+      <div class="hp" aria-hidden="true"><label for="msg-website">เว็บไซต์<input id="msg-website" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <button class="btn" type="submit">ส่งข้อความ</button>
+      <p id="message-status" class="status" role="status"></p>
+    </form>
+  </section>
+
+  <footer>ตัวเลขขนาดระบบนับจาก source code จริงของแต่ละโปรเจกต์ (ค่าโดยประมาณ)</footer>
+</div>
+</body>
+</html>
